@@ -1,4 +1,4 @@
-# EXPERIMENT--03-SIMULATION-OF-PUSHBUTTON-AND-LED INTERFACE WITH ARM CONTROLLER AND PROTEUS 
+# EXPERIMENT-03-SIMULATION-OF-PUSHBUTTON-AND-LED INTERFACE WITH ARM CONTROLLER AND PROTEUS 
 ## Aim: To Interface a Digital output (LED) and Digital input (Pushbutton) to ARM development board , and simulate it in Proteus 
 ## Components required: STM32 CUBE IDE, Proteus 8 simulator .
 ## Theory 
@@ -72,12 +72,10 @@ We are now at the last part of step by step guide on how to simulate STM32 proje
 
 ## STM 32 CUBE PROGRAM :
 ```
-
 #include "main.h"
-#include <stdbool.h>
+#include "stdbool.h"
 
-void push_button();
-bool button_status;
+bool PUSHBUTT;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -90,20 +88,19 @@ int main(void)
 
   while (1)
   {
-    push_button();
-  }
-}
-
-void push_button()
-{
-  button_status = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5);
-  if (button_status == 0)
-  {
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
-  }
-  else
-  {
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+    PUSHBUTT = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+    if (PUSHBUTT == 0)
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+      HAL_Delay(2000);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+      HAL_Delay(2000);
+    }
+    else
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+      HAL_Delay(2000);
+    }
   }
 }
 
@@ -124,8 +121,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-                              | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -143,14 +140,14 @@ static void MX_GPIO_Init(void)
 
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_11;
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -165,7 +162,7 @@ void Error_Handler(void)
   }
 }
 
-#ifdef USE_FULL_ASSERT
+#ifdef  USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line)
 {
 }
@@ -176,13 +173,13 @@ void assert_failed(uint8_t *file, uint32_t line)
 
 ## Output screen shots of proteus  :
 
+<img width="1031" height="647" alt="image" src="https://github.com/user-attachments/assets/0e3d6a34-75f3-4ec0-8c52-5eaba8f83af6" />
 
-<img width="789" height="617" alt="497019234-3b45efe2-8d55-4371-bc1f-f4178dcc4c25" src="https://github.com/user-attachments/assets/9f23c55d-babe-433f-a8bf-bccec2ab9dae" />
 
 
 ## Proteus layout(Add pdf screen shot of circuit here)
  
- <img width="687" height="703" alt="497018985-ff236142-baa5-49b1-9bb1-a6b1e2c2ffaa" src="https://github.com/user-attachments/assets/dfb77d05-46c3-4425-b701-a2a8ca66169e" />
+ <img width="1034" height="649" alt="image" src="https://github.com/user-attachments/assets/457f4aef-1411-4849-9067-cc4d57ca4cf1" />
 
  
  
